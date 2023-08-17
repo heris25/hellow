@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en-us">
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <title>WVS | Hello World Unity</title>
+      <link rel="shortcut icon" href="TemplateData/favicon.ico">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+      <link rel="stylesheet" href="TemplateData/style.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+      <script src="TemplateData/scripts/alert.js"></script>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-W6D81Y19Z5"></script>
+      <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-W6D81Y19Z5');
+      </script>\
+      <script>
+         (function(h,o,t,j,a,r){
+            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+            h._hjSettings={hjid:2944985,hjsv:6};
+            a=o.getElementsByTagName('head')[0];
+            r=o.createElement('script');r.async=1;
+            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+            a.appendChild(r);
+         })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+      </script>
+   </head>
+   <body>
+     <div class="alert">URL Copied to Clipboard</div>
+      <div id="unity-container" class="unity-desktop">
+         <div id="header">
+            <div id="title">
+               <h1 id="unity-build-title">Hello World Unity</h1>
+               <h2 id="company-name">wevr</h2>
+            </div>
+           
+            <div class="actions">
+               <p>Version: 0.1</p>
+               <a href="#" id="btn" class="button"><img src="TemplateData/icons/Link.svg" width="24" height="24" alt="Copy Link"></a>
+               <a href="#" id="unity-fullscreen-button" class="button"><img src="TemplateData/icons/Fullscreen.svg" width="24" height="24" alt="Fullscreen"></a>
+            </div>
+         </div>
+         <canvas id="unity-canvas"></canvas>
+         <div id="overlay-clip" class="overlay">
+            <div id="overlay" class="overlay-layer"></div>
+         </div>
+         
+         <div id="unity-loading-bar">
+            <div id="unity-logo"></div>
+         </div>
+         <div id="unity-footer">
+            <p>Powered By</p> <a href="https://wvs.io/?utm_source=Unity+Store&utm_medium=website&utm_campaign=WebGL_Template&utm_content=Hello World Unity" target="_blank"><img src="TemplateData/Logo.svg" alt="WVS.IO"></a>
+         </div>
+         
+         <div id="counter" class="counter">
+            <p id="loadingInfo" style="position: relative; top: 28px;">Loading</p>
+            <h2 id="progressC">0%</h2>
+            <div id="ProgressLineB" class="ProgressLineB"> </div>
+            <div id="ProgressLine" class="ProgressLine"> </div>
+         </div>
+      </div>
+      <div id="loadingBox">
+         <div class="vertical-centered-box">
+            <div class="content">
+               <div class="loader-circle"></div>
+               <div class="loader-line-mask">
+                  <div class="loader-line"></div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <script>
+         var buildUrl = "Build";
+         var loaderUrl = buildUrl + "/Build.loader.js";
+         var config = {
+           dataUrl: buildUrl + "/Build.data",
+           frameworkUrl: buildUrl + "/Build.framework.js",
+           codeUrl: buildUrl + "/Build.wasm",
+           streamingAssetsUrl: "StreamingAssets",
+           companyName: "wevr",
+           productName: "Hello World Unity",
+           productVersion: "0.1",
+         };
+         
+         var container = document.querySelector("#unity-container");
+         var canvas = document.querySelector("#unity-canvas");
+         var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+         var loadingBar = document.querySelector("#unity-loading-bar");
+         
+         if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+           container.className = "unity-mobile";
+           config.devicePixelRatio = 1;
+         } else {
+           canvas.style.width = "1280px";
+           canvas.style.height = "720px";
+         }
+         loadingBar.style.display = "block";
+         var script = document.createElement("script");
+         script.src = loaderUrl;
+         script.onload = () => {
+           createUnityInstance(canvas, config, (progress) => {
+         if (progress == 1) {
+         document.getElementById("ProgressLine").style.width = (200 * (progress)) + "px";
+         document.getElementById("loadingInfo").innerHTML = "Loading";
+         document.getElementById("progressC").innerHTML = Math.floor((100 * progress)) + "%";
+         } else {
+         document.getElementById("loadingInfo").innerHTML = "Downloading";
+         document.getElementById("progressC").innerHTML = Math.floor((100 * progress)) + "%";
+         document.getElementById("ProgressLine").style.width = (200 * (progress)) + "px";
+         }
+           }).then((unityInstance) => {
+             $('#overlay').delay(350).animate({"margin-left": '-=1700'}, 'slow').fadeOut();
+             $('#overlay-clip').delay(350).animate({opacity:0}, 'slow').fadeOut();
+         $('#counter').delay(200).animate({opacity:0, "margin-top": '-=100'}, 150, function(){ $(this).css("display","none"); });
+         $('#loadingBox').delay(200).animate({"margin-top": '+=100', opacity:0}, '200',function(){ $(this).css("display","none");});
+         loadingBar.style.display = "none";
+             fullscreenButton.onclick = () => {
+               unityInstance.SetFullscreen(1);
+             };
+           }).catch((message) => {
+             alert(message);
+           });
+         };
+         document.body.appendChild(script);
+      </script>
+   </body>
+</html>
